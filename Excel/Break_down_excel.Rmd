@@ -132,3 +132,25 @@ file.read.bound
 
 ```
 
+what if we only want to combine two sheets, not all? 
+
+```{r}
+
+selected_tabs <- file.read[c(1:2)] 
+
+selected_tabs
+
+```
+
+now we can combine just the first and third dataframe in a new df...
+
+```{r}
+
+selected_tabs_bound <- bind_rows(selected_tabs,
+                             
+                             .id = "id")
+
+selected_tabs_bound
+
+```
+
