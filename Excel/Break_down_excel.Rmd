@@ -69,39 +69,66 @@ library(tidyverse)
 
 
 ```{r}
-
 # Specify the path to the Excel file
-excel_file <- "ExcelMock1.xlsx"
+
+excel_file <- "/cloud/project/Excel/ExcelMock1.xlsx"
 
 excel_file
 
-# Read the Excel file
+
+# parse the Excel file sheets
 
 sheets <- excel_sheets(excel_file)
 
-# Loop through each sheet and save it as a separate CSV file
-for (sheet in sheets) {
-  
-  data <- read_excel(excel_file, sheet = sheet)
-  
-  # Remove invalid characters from the sheet name to use it as the CSV file name
-  csv_file <- paste0(gsub("[[:punct:]]", "", sheet), ".csv")
-  
-  # Save the sheet as a CSV file in the same directory
-  write_xlsx(data, csv_file)
-  
-  # Provide feedback on the process
-  cat("Saved", sheet, "as", csv_file, "/n")
-  
-}
+sheets
 
+
+# read in sheets from xl file as list first...
+
+file.read <- lapply(excel_sheets(excel_file),
+                    
+                    read_excel,
+                    
+                    path = excel_file)
+
+file.read
 
 ```
 
 
 ```{r}
 
+# Loop through each sheet and save it as a separate CSV file
 
+# for (sheet in sheets) {
+#   
+#   data <- read_excel(excel_file, sheet = sheet)
+#   
+#   # Remove invalid characters from the sheet name to use it as the CSV file name
+#   csv_file <- paste0(gsub("[[:punct:]]", "", sheet), ".csv")
+#   
+#   # Save the sheet as a CSV file in the same directory
+#   write_xlsx(data, csv_file)
+#   
+#   # Provide feedback on the process
+#   cat("Saved", sheet, "as", csv_file, "/n")
+#   
+# }
+
+
+```
+
+Reading sheet as .csv's threw errors
+
+Let's just combine the list elements in one new df...
+
+```{r}
+
+file.read.bound <- bind_rows(file.read,
+                             
+                             .id = "id")
+
+file.read.bound
 
 ```
 
