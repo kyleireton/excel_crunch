@@ -1,0 +1,107 @@
+---
+title: "Break_down_excel"
+author: "Kyle Ireton"
+date: "2023-05-08"
+output: html_document
+---
+
+# full setup from scratch
+
+```{r}
+# first, you need to install `usethis`
+# install.packages("usethis")
+```
+
+
+```{r}
+# Add authentication information:
+# Use your GitHub user name and associated email address.
+
+# usethis::use_git_config(
+#   user.name = "kyleireton",
+#   user.email = "kyle.ireton@gmail.com"
+# )
+
+```
+
+
+```{r}
+# feel free to write a more appropriate description.
+# default scopes of the token should work fine.
+## usethis::create_github_token(description = "connect this session to github")
+# make sure to store your token in a save place, e.g. a password manager.
+# I currently use bitwarden, which is free and open source.
+```
+
+
+```{r}
+
+# usethis::edit_r_environ()
+
+# add github token to .Renviron as:
+# GITHUB_PAT = *your token here*
+```
+
+ghp_
+JFYK89i4SNPMrVYSkGluUlNApF9q643WSE80
+
+```{r}
+# finally, add your token to the machine. Use:
+
+# gitcreds::gitcreds_set()
+
+# And enter the created GH-Token in the R console when prompted
+
+```
+
+Let's break an excel file into its individual tabs as .csv's in the same directory
+
+```{r setup, include=FALSE}
+
+# install.packages("readxl")
+# install.packages("writexl")
+
+library(readxl)
+library(writexl)
+library(tidyverse)
+
+```
+
+
+```{r}
+
+# Specify the path to the Excel file
+excel_file <- "ExcelMock1.xlsx"
+
+excel_file
+
+# Read the Excel file
+
+sheets <- excel_sheets(excel_file)
+
+# Loop through each sheet and save it as a separate CSV file
+for (sheet in sheets) {
+  
+  data <- read_excel(excel_file, sheet = sheet)
+  
+  # Remove invalid characters from the sheet name to use it as the CSV file name
+  csv_file <- paste0(gsub("[[:punct:]]", "", sheet), ".csv")
+  
+  # Save the sheet as a CSV file in the same directory
+  write_xlsx(data, csv_file)
+  
+  # Provide feedback on the process
+  cat("Saved", sheet, "as", csv_file, "/n")
+  
+}
+
+
+```
+
+
+```{r}
+
+
+
+```
+
